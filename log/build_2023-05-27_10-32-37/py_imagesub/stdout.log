@@ -1,0 +1,39 @@
+running egg_info
+creating ../build/py_imagesub/py_imagesub.egg-info
+writing ../build/py_imagesub/py_imagesub.egg-info/PKG-INFO
+writing dependency_links to ../build/py_imagesub/py_imagesub.egg-info/dependency_links.txt
+writing entry points to ../build/py_imagesub/py_imagesub.egg-info/entry_points.txt
+writing requirements to ../build/py_imagesub/py_imagesub.egg-info/requires.txt
+writing top-level names to ../build/py_imagesub/py_imagesub.egg-info/top_level.txt
+writing manifest file '../build/py_imagesub/py_imagesub.egg-info/SOURCES.txt'
+reading manifest file '../build/py_imagesub/py_imagesub.egg-info/SOURCES.txt'
+writing manifest file '../build/py_imagesub/py_imagesub.egg-info/SOURCES.txt'
+running build
+running build_py
+creating /home/mike/ros2_opencv_lander/build/py_imagesub/build
+creating /home/mike/ros2_opencv_lander/build/py_imagesub/build/lib
+creating /home/mike/ros2_opencv_lander/build/py_imagesub/build/lib/py_imagesub
+copying py_imagesub/subscriber_member_function.py -> /home/mike/ros2_opencv_lander/build/py_imagesub/build/lib/py_imagesub
+copying py_imagesub/__init__.py -> /home/mike/ros2_opencv_lander/build/py_imagesub/build/lib/py_imagesub
+copying py_imagesub/publisher_member_function.py -> /home/mike/ros2_opencv_lander/build/py_imagesub/build/lib/py_imagesub
+running install
+running install_lib
+creating /home/mike/ros2_opencv_lander/install/py_imagesub/lib/python3.10/site-packages/py_imagesub
+copying /home/mike/ros2_opencv_lander/build/py_imagesub/build/lib/py_imagesub/subscriber_member_function.py -> /home/mike/ros2_opencv_lander/install/py_imagesub/lib/python3.10/site-packages/py_imagesub
+copying /home/mike/ros2_opencv_lander/build/py_imagesub/build/lib/py_imagesub/__init__.py -> /home/mike/ros2_opencv_lander/install/py_imagesub/lib/python3.10/site-packages/py_imagesub
+copying /home/mike/ros2_opencv_lander/build/py_imagesub/build/lib/py_imagesub/publisher_member_function.py -> /home/mike/ros2_opencv_lander/install/py_imagesub/lib/python3.10/site-packages/py_imagesub
+byte-compiling /home/mike/ros2_opencv_lander/install/py_imagesub/lib/python3.10/site-packages/py_imagesub/subscriber_member_function.py to subscriber_member_function.cpython-310.pyc
+byte-compiling /home/mike/ros2_opencv_lander/install/py_imagesub/lib/python3.10/site-packages/py_imagesub/__init__.py to __init__.cpython-310.pyc
+byte-compiling /home/mike/ros2_opencv_lander/install/py_imagesub/lib/python3.10/site-packages/py_imagesub/publisher_member_function.py to publisher_member_function.cpython-310.pyc
+running install_data
+creating /home/mike/ros2_opencv_lander/install/py_imagesub/share/ament_index
+creating /home/mike/ros2_opencv_lander/install/py_imagesub/share/ament_index/resource_index
+creating /home/mike/ros2_opencv_lander/install/py_imagesub/share/ament_index/resource_index/packages
+copying resource/py_imagesub -> /home/mike/ros2_opencv_lander/install/py_imagesub/share/ament_index/resource_index/packages
+copying package.xml -> /home/mike/ros2_opencv_lander/install/py_imagesub/share/py_imagesub
+running install_egg_info
+Copying ../build/py_imagesub/py_imagesub.egg-info to /home/mike/ros2_opencv_lander/install/py_imagesub/lib/python3.10/site-packages/py_imagesub-0.0.0-py3.10.egg-info
+running install_scripts
+Installing listener script to /home/mike/ros2_opencv_lander/install/py_imagesub/lib/py_imagesub
+Installing talker script to /home/mike/ros2_opencv_lander/install/py_imagesub/lib/py_imagesub
+writing list of installed files to '/home/mike/ros2_opencv_lander/build/py_imagesub/install.log'

@@ -1,0 +1,43 @@
+[0.575s] Invoking command in '/home/mike/ros2_opencv_lander/py_imagesub': PYTHONPATH=/home/mike/ros2_opencv_lander/build/py_imagesub/prefix_override:/home/mike/ros2_opencv_lander/install/py_imagesub/lib/python3.10/site-packages:${PYTHONPATH} /usr/bin/python3 setup.py egg_info --egg-base ../build/py_imagesub build --build-base /home/mike/ros2_opencv_lander/build/py_imagesub/build install --record /home/mike/ros2_opencv_lander/build/py_imagesub/install.log --single-version-externally-managed
+[0.771s] running egg_info
+[0.772s] creating ../build/py_imagesub/py_imagesub.egg-info
+[0.773s] writing ../build/py_imagesub/py_imagesub.egg-info/PKG-INFO
+[0.774s] writing dependency_links to ../build/py_imagesub/py_imagesub.egg-info/dependency_links.txt
+[0.774s] writing entry points to ../build/py_imagesub/py_imagesub.egg-info/entry_points.txt
+[0.775s] writing requirements to ../build/py_imagesub/py_imagesub.egg-info/requires.txt
+[0.775s] writing top-level names to ../build/py_imagesub/py_imagesub.egg-info/top_level.txt
+[0.776s] writing manifest file '../build/py_imagesub/py_imagesub.egg-info/SOURCES.txt'
+[0.778s] reading manifest file '../build/py_imagesub/py_imagesub.egg-info/SOURCES.txt'
+[0.779s] writing manifest file '../build/py_imagesub/py_imagesub.egg-info/SOURCES.txt'
+[0.780s] running build
+[0.781s] running build_py
+[0.781s] creating /home/mike/ros2_opencv_lander/build/py_imagesub/build
+[0.781s] creating /home/mike/ros2_opencv_lander/build/py_imagesub/build/lib
+[0.781s] creating /home/mike/ros2_opencv_lander/build/py_imagesub/build/lib/py_imagesub
+[0.781s] copying py_imagesub/subscriber_member_function.py -> /home/mike/ros2_opencv_lander/build/py_imagesub/build/lib/py_imagesub
+[0.783s] copying py_imagesub/__init__.py -> /home/mike/ros2_opencv_lander/build/py_imagesub/build/lib/py_imagesub
+[0.783s] copying py_imagesub/publisher_member_function.py -> /home/mike/ros2_opencv_lander/build/py_imagesub/build/lib/py_imagesub
+[0.783s] running install
+[0.788s] running install_lib
+[0.788s] creating /home/mike/ros2_opencv_lander/install/py_imagesub/lib/python3.10/site-packages/py_imagesub
+[0.788s] copying /home/mike/ros2_opencv_lander/build/py_imagesub/build/lib/py_imagesub/subscriber_member_function.py -> /home/mike/ros2_opencv_lander/install/py_imagesub/lib/python3.10/site-packages/py_imagesub
+[0.788s] copying /home/mike/ros2_opencv_lander/build/py_imagesub/build/lib/py_imagesub/__init__.py -> /home/mike/ros2_opencv_lander/install/py_imagesub/lib/python3.10/site-packages/py_imagesub
+[0.788s] copying /home/mike/ros2_opencv_lander/build/py_imagesub/build/lib/py_imagesub/publisher_member_function.py -> /home/mike/ros2_opencv_lander/install/py_imagesub/lib/python3.10/site-packages/py_imagesub
+[0.788s] byte-compiling /home/mike/ros2_opencv_lander/install/py_imagesub/lib/python3.10/site-packages/py_imagesub/subscriber_member_function.py to subscriber_member_function.cpython-310.pyc
+[0.788s] byte-compiling /home/mike/ros2_opencv_lander/install/py_imagesub/lib/python3.10/site-packages/py_imagesub/__init__.py to __init__.cpython-310.pyc
+[0.788s] byte-compiling /home/mike/ros2_opencv_lander/install/py_imagesub/lib/python3.10/site-packages/py_imagesub/publisher_member_function.py to publisher_member_function.cpython-310.pyc
+[0.788s] running install_data
+[0.788s] creating /home/mike/ros2_opencv_lander/install/py_imagesub/share/ament_index
+[0.788s] creating /home/mike/ros2_opencv_lander/install/py_imagesub/share/ament_index/resource_index
+[0.788s] creating /home/mike/ros2_opencv_lander/install/py_imagesub/share/ament_index/resource_index/packages
+[0.788s] copying resource/py_imagesub -> /home/mike/ros2_opencv_lander/install/py_imagesub/share/ament_index/resource_index/packages
+[0.788s] copying package.xml -> /home/mike/ros2_opencv_lander/install/py_imagesub/share/py_imagesub
+[0.789s] running install_egg_info
+[0.789s] Copying ../build/py_imagesub/py_imagesub.egg-info to /home/mike/ros2_opencv_lander/install/py_imagesub/lib/python3.10/site-packages/py_imagesub-0.0.0-py3.10.egg-info
+[0.789s] /usr/lib/python3/dist-packages/setuptools/command/install.py:34: SetuptoolsDeprecationWarning: setup.py install is deprecated. Use build and pip and other standards-based tools.
+[0.789s]   warnings.warn(
+[0.792s] running install_scripts
+[0.805s] Installing listener script to /home/mike/ros2_opencv_lander/install/py_imagesub/lib/py_imagesub
+[0.805s] Installing talker script to /home/mike/ros2_opencv_lander/install/py_imagesub/lib/py_imagesub
+[0.805s] writing list of installed files to '/home/mike/ros2_opencv_lander/build/py_imagesub/install.log'
+[0.826s] Invoked command in '/home/mike/ros2_opencv_lander/py_imagesub' returned '0': PYTHONPATH=/home/mike/ros2_opencv_lander/build/py_imagesub/prefix_override:/home/mike/ros2_opencv_lander/install/py_imagesub/lib/python3.10/site-packages:${PYTHONPATH} /usr/bin/python3 setup.py egg_info --egg-base ../build/py_imagesub build --build-base /home/mike/ros2_opencv_lander/build/py_imagesub/build install --record /home/mike/ros2_opencv_lander/build/py_imagesub/install.log --single-version-externally-managed
