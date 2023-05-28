@@ -1,0 +1,2 @@
+Invoking command in '/home/mike/ros2_opencv_lander/build/ros_numpy': /usr/bin/cmake /home/mike/ros2_opencv_lander/ros_numpy -DCATKIN_INSTALL_INTO_PREFIX_ROOT=0 -DCMAKE_INSTALL_PREFIX=/home/mike/ros2_opencv_lander/install/ros_numpy
+Invoked command in '/home/mike/ros2_opencv_lander/build/ros_numpy' returned '1': /usr/bin/cmake /home/mike/ros2_opencv_lander/ros_numpy -DCATKIN_INSTALL_INTO_PREFIX_ROOT=0 -DCMAKE_INSTALL_PREFIX=/home/mike/ros2_opencv_lander/install/ros_numpy

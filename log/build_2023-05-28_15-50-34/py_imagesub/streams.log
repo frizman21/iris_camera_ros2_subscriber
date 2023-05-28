@@ -1,0 +1,24 @@
+[0.524s] Invoking command in '/home/mike/ros2_opencv_lander/py_imagesub': PYTHONPATH=/home/mike/ros2_opencv_lander/build/py_imagesub/prefix_override:/home/mike/ros2_opencv_lander/install/py_imagesub/lib/python3.10/site-packages:${PYTHONPATH} /usr/bin/python3 setup.py egg_info --egg-base ../build/py_imagesub build --build-base /home/mike/ros2_opencv_lander/build/py_imagesub/build install --record /home/mike/ros2_opencv_lander/build/py_imagesub/install.log --single-version-externally-managed
+[0.728s] running egg_info
+[0.737s] /usr/lib/python3/dist-packages/setuptools/command/install.py:34: SetuptoolsDeprecationWarning: setup.py install is deprecated. Use build and pip and other standards-based tools.
+[0.737s]   warnings.warn(
+[0.737s] writing ../build/py_imagesub/py_imagesub.egg-info/PKG-INFO
+[0.737s] writing dependency_links to ../build/py_imagesub/py_imagesub.egg-info/dependency_links.txt
+[0.737s] writing entry points to ../build/py_imagesub/py_imagesub.egg-info/entry_points.txt
+[0.737s] writing requirements to ../build/py_imagesub/py_imagesub.egg-info/requires.txt
+[0.737s] writing top-level names to ../build/py_imagesub/py_imagesub.egg-info/top_level.txt
+[0.737s] reading manifest file '../build/py_imagesub/py_imagesub.egg-info/SOURCES.txt'
+[0.738s] writing manifest file '../build/py_imagesub/py_imagesub.egg-info/SOURCES.txt'
+[0.738s] running build
+[0.738s] running build_py
+[0.738s] running install
+[0.738s] running install_lib
+[0.738s] running install_data
+[0.738s] running install_egg_info
+[0.738s] removing '/home/mike/ros2_opencv_lander/install/py_imagesub/lib/python3.10/site-packages/py_imagesub-0.0.0-py3.10.egg-info' (and everything under it)
+[0.738s] Copying ../build/py_imagesub/py_imagesub.egg-info to /home/mike/ros2_opencv_lander/install/py_imagesub/lib/python3.10/site-packages/py_imagesub-0.0.0-py3.10.egg-info
+[0.738s] running install_scripts
+[0.753s] Installing listener script to /home/mike/ros2_opencv_lander/install/py_imagesub/lib/py_imagesub
+[0.753s] Installing talker script to /home/mike/ros2_opencv_lander/install/py_imagesub/lib/py_imagesub
+[0.754s] writing list of installed files to '/home/mike/ros2_opencv_lander/build/py_imagesub/install.log'
+[0.785s] Invoked command in '/home/mike/ros2_opencv_lander/py_imagesub' returned '0': PYTHONPATH=/home/mike/ros2_opencv_lander/build/py_imagesub/prefix_override:/home/mike/ros2_opencv_lander/install/py_imagesub/lib/python3.10/site-packages:${PYTHONPATH} /usr/bin/python3 setup.py egg_info --egg-base ../build/py_imagesub build --build-base /home/mike/ros2_opencv_lander/build/py_imagesub/build install --record /home/mike/ros2_opencv_lander/build/py_imagesub/install.log --single-version-externally-managed
