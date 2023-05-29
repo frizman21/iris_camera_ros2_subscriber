@@ -34,6 +34,16 @@ import numpy as np
 
 
 
+
+
+print("OpenCV Version: {}".format(cv2.__version__))
+print("Python Version")
+print(sys.version)
+
+from dronekit import connect, VehicleMode,LocationGlobalRelative,APIException
+from pymavlink import mavutil
+print("DroneKit Loaded")
+
 id_to_find = 72
 marker_size = 19 #cm
 takeoff_height = 8
@@ -43,11 +53,6 @@ aruco_dict = aruco.getPredefinedDictionary(aruco.DICT_ARUCO_ORIGINAL)
 
 # dictionary = cv2.aruco.getPredefinedDictionary(cv.aruco.DICT_4X4_250)
 
-
-
-print("OpenCV Version: {}".format(cv2.__version__))
-print("Python Version")
-print(sys.version)
 
 # dictionary = cv2.aruco.getPredefinedDictionary(cv.aruco.DICT_ARUCO_ORIGINAL)
 parameters = cv2.aruco.DetectorParameters()
@@ -65,6 +70,9 @@ calib_path="/home/mike/ros2_opencv_lander/py_imagesub/"
 cameraMatrix   = np.loadtxt(calib_path+'cameraMatrix.txt', delimiter=',')
 cameraDistortion   = np.loadtxt(calib_path+'cameraDistortion.txt', delimiter=',')
 
+vehicle = connect('tcp:127.0.0.1:5762')
+print(vehicle.mode)
+
 class MinimalSubscriber(Node):
 
     def __init__(self):
@@ -79,9 +87,23 @@ class MinimalSubscriber(Node):
 
         self.br = CvBridge()
 
+    
+    # def send_land_message(x,y):
+    #     msg = vehicle.message_factory.landing_target_encode(
+    #         0,
+    #         0,
+    #         mavutil.mavlink.MAV_FRAME_BODY_OFFSET_NED,
+    #         x,
+    #         y,
+    #         0,
+    #         0,
+    #         0,)
+    #     vehicle.send_mavlink(msg)
+    #     vehicle.flush()
+
     def listener_callback(self, msg):
                 
-        self.get_logger().info('I heard:')
+        self.get_logger().info('Received an image')
         
         # if vehicle.mode!='LAND':
         #     # No-Op - if not landing, ignore this message
@@ -89,40 +111,21 @@ class MinimalSubscriber(Node):
         # else:
 
         current_frame = self.br.imgmsg_to_cv2(msg)
-
-        gray_img = cv2.cvtColor(current_frame,cv2.COLOR_BGR2GRAY)
-
-        # Example content - replaced with new method for same task
-        # corners, ids, rejected = aruco.detectMarkers(image=gray_img,dictionary=aruco_dict,parameters=parameters)
-        # corners, ids, _ = aruco.detectMarkers(gray, self.aruco_dict, parameters=self.parameters)
-        # markerCorners, markerIds, rejectedCandidates = detector.detectMarkers(gray_img)
-        
-        # markerCorners, markerIds, rejectedCandidates = detector.detectMarkers(gray_img)
-        # (markerCorners, markerIds, rejectedCandidates) = aruco.detectMarkers(opencv_image_gray, self.aruco_dict)
-    
-    # LATEST
+        gray_img = cv2.cvtColor(current_frame,cv2.COLOR_BGR2GRAY)    
         corners, markerIds, rejectedCandidates = aruco.detectMarkers(gray_img, dictionary=aruco_dict)
 
-        # (corners, detected_ids, rejected_image_points) = aruco.detectMarkers(opencv_image_gray, self.aruco_dict)
     
         if markerIds is not None and markerIds[0] == id_to_find:
-            print('Found something')
+            print('  Found something')
             
-            
-            # OLD way
             ret = aruco.estimatePoseSingleMarkers(corners,marker_size,cameraMatrix=cameraMatrix,distCoeffs=cameraDistortion)
-
-            # C++ way
-            # solvePnP(objPoints, corners.at(i), cameraMatrix, distCoeffs, rvecs.at(i), tvecs.at(i));
-
-
-
-
             (rvec, tvec) = (ret[0][0, 0, :], ret[1][0, 0, :])
 
             x = '{:.2f}'.format(tvec[0])
             y = '{:.2f}'.format(tvec[1])
             z = '{:.2f}'.format(tvec[2])
+
+            print("  MARKER POSITION: x=" +x+" y= "+y+" z="+z)
         
             y_sum = 0
             x_sum = 0
@@ -135,9 +138,24 @@ class MinimalSubscriber(Node):
             
             x_ang = (x_avg - horizontal_res*.5)*(horizontal_fov/horizontal_res)
             y_ang = (y_avg - vertical_res*.5)*(vertical_fov/vertical_res)
+            
+            print("  X CENTER PIXEL: "+str(x_avg)+" Y CENTER PIXEL: "+str(y_avg))
 
-            print(x_ang)
-            print(y_ang)
+            # send_land_message(x_ang,y_ang)
+
+            print("  Sending correction message to ArduPilot")
+            msg = vehicle.message_factory.landing_target_encode(
+                0,
+                0,
+                mavutil.mavlink.MAV_FRAME_BODY_OFFSET_NED,
+                x_ang,
+                y_ang,
+                0,
+                0,
+                0,)
+            vehicle.send_mavlink(msg)
+            vehicle.flush()
+            print("    Sent")
 
         # if markerIds is not None:
         #     self.get_logger().info('   Found Something!')
