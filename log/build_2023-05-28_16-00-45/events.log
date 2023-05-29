@@ -1,4 +1,0 @@
-[0.000000] (-) TimerEvent: {}
-[0.000326] (-) JobUnselected: {'identifier': 'py_imagesub'}
-[0.000354] (-) JobUnselected: {'identifier': 'ros_numpy'}
-[0.000663] (-) EventReactorShutdown: {}
