@@ -73,6 +73,20 @@ cameraDistortion   = np.loadtxt(calib_path+'cameraDistortion.txt', delimiter=','
 vehicle = connect('tcp:127.0.0.1:5762')
 print(vehicle.mode)
 
+
+def send_land_message(x,y):
+    msg = vehicle.message_factory.landing_target_encode(
+        0,
+        0,
+        mavutil.mavlink.MAV_FRAME_BODY_OFFSET_NED,
+        x,
+        y,
+        0,
+        0,
+        0,)
+    vehicle.send_mavlink(msg)
+    vehicle.flush()
+
 class MinimalSubscriber(Node):
 
     def __init__(self):
@@ -88,18 +102,7 @@ class MinimalSubscriber(Node):
         self.br = CvBridge()
 
     
-    # def send_land_message(x,y):
-    #     msg = vehicle.message_factory.landing_target_encode(
-    #         0,
-    #         0,
-    #         mavutil.mavlink.MAV_FRAME_BODY_OFFSET_NED,
-    #         x,
-    #         y,
-    #         0,
-    #         0,
-    #         0,)
-    #     vehicle.send_mavlink(msg)
-    #     vehicle.flush()
+
 
     def listener_callback(self, msg):
                 
@@ -141,26 +144,10 @@ class MinimalSubscriber(Node):
             
             print("  X CENTER PIXEL: "+str(x_avg)+" Y CENTER PIXEL: "+str(y_avg))
 
-            # send_land_message(x_ang,y_ang)
-
+            
             print("  Sending correction message to ArduPilot")
-            msg = vehicle.message_factory.landing_target_encode(
-                0,
-                0,
-                mavutil.mavlink.MAV_FRAME_BODY_OFFSET_NED,
-                x_ang,
-                y_ang,
-                0,
-                0,
-                0,)
-            vehicle.send_mavlink(msg)
-            vehicle.flush()
+            send_land_message(x_ang,y_ang)
             print("    Sent")
-
-        # if markerIds is not None:
-        #     self.get_logger().info('   Found Something!')
-        # else:
-        #     self.get_logger().info('   Nothing.')
 
         cv2.imshow("camera", gray_img)
         cv2.waitKey(1)
