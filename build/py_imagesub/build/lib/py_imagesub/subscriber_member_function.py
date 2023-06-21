@@ -145,7 +145,7 @@ class MinimalSubscriber(Node):
             print("  X CENTER PIXEL: "+str(x_avg)+" Y CENTER PIXEL: "+str(y_avg))
 
             
-            print("  Sending correction message to ArduPilot")
+            print("  Sending correction message to ArduPilot - " + str(x_ang) + "," + str(y_ang))
             send_land_message(x_ang,y_ang)
             print("    Sent")
 

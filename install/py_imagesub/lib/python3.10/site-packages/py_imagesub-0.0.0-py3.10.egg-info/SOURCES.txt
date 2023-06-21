@@ -10,6 +10,7 @@ setup.py
 ../build/py_imagesub/py_imagesub.egg-info/zip-safe
 py_imagesub/__init__.py
 py_imagesub/publisher_member_function.py
+py_imagesub/streamer_member_function.py
 py_imagesub/subscriber_member_function.py
 resource/py_imagesub
 test/test_copyright.py

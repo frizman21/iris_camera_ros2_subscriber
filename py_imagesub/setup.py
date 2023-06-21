@@ -22,6 +22,7 @@ setup(
         'console_scripts': [
             'talker = py_imagesub.publisher_member_function:main',
             'listener = py_imagesub.subscriber_member_function:main',
+            'streamer = py_imagesub.streamer_member_function:main',
         ],
     },
 )
