@@ -1,4 +1,5 @@
 [console_scripts]
 listener = py_imagesub.subscriber_member_function:main
+streamer = py_imagesub.streamer_member_function:main
 talker = py_imagesub.publisher_member_function:main
 
