@@ -33,17 +33,17 @@ print("OpenCV Version: {}".format(cv2.__version__))
 
 import numpy as np
 
-
-import gi
 # import cv2
 # import argparse
 # import cv2 as cv
 
 # import required library like Gstreamer and GstreamerRtspServer
+import gi
 gi.require_version('Gst', '1.0')
-gi.require_version('GstRtspServer', '1.0')
+
 from gi.repository import Gst, GstRtspServer, GObject
 print("GstRtspServer Loaded")
+
 
 print("Python Version")
 print(sys.version)
@@ -95,6 +95,40 @@ def send_land_message(x,y):
     vehicle.send_mavlink(msg)
     vehicle.flush()
 
+def gstreamer_pipeline_out():
+    return (
+        "appsrc ! "
+        "video/x-raw, format=BGR ! "
+        "queue ! "
+        "videoconvert ! "
+        "video/x-raw, format=BGRx ! "
+        "nvvidconv ! "
+        "omxh264enc ! "
+        "video/x-h264, stream-format=byte-stream ! "
+        "h264parse ! "
+        "rtph264pay pt=96 config-interval=1 name=test! "
+        "udpsink host=127.0.0.1 port=8554"
+    )
+
+# def my_gstreamer_pipeline_out():
+#     return (
+#         "appsrc ! "
+#         "video/x-raw, format=BGR ! "
+#         "queue ! "
+#         "videoconvert ! "
+#         "video/x-raw, format=BGRx ! "
+#         "nvvidconv ! "
+#         "omxh264enc ! "
+#         "video/x-h264, stream-format=byte-stream ! "
+#         "h264parse ! "
+#         "rtph264pay pt=96 config-interval=1 name=test! "
+#         "udpsink host= port=8554"
+#     )
+
+
+# videotestsrc ! x264enc tune=zerolatency bitrate=500 speed-preset=superfast ! rtph264pay ! udpsink port=5000 host=$HOST
+    
+
 class MinimalSubscriber(Node):
 
     def __init__(self):
@@ -109,6 +143,26 @@ class MinimalSubscriber(Node):
 
         self.br = CvBridge()
 
+        # x = threading.Thread(target=thread_function, args=(1,))
+        # x.start()
+
+
+        # self.out = cv2.VideoWriter(gstreamer_pipeline_out(), 0, 60, (1280, 720))
+
+        width = 640
+        height = 480
+
+        # IP address and port for the unicast stream
+        fourcc = cv2.VideoWriter_fourcc(*"X264")
+        ip_address = "192.168.1.255"
+        port = "5000"
+        pipeline = f"appsrc ! videoconvert ! x264enc tune=zerolatency bitrate=500 speed-preset=superfast ! video/x-h264, stream-format=byte-stream ! rtph264pay ! udpsink host={ip_address} port={port}"
+        self.out = cv2.VideoWriter(pipeline, fourcc, 3.0, (width, height), True)
+
+
+
+
+
     def listener_callback(self, msg):
                 
         self.get_logger().info('Received an image')
@@ -119,6 +173,8 @@ class MinimalSubscriber(Node):
         # else:
 
         current_frame = self.br.imgmsg_to_cv2(msg)
+        print("  writing frame")
+        self.out.write(current_frame)
         gray_img = cv2.cvtColor(current_frame,cv2.COLOR_BGR2GRAY)    
         corners, markerIds, rejectedCandidates = aruco.detectMarkers(gray_img, dictionary=aruco_dict)
 
@@ -158,109 +214,167 @@ class MinimalSubscriber(Node):
         cv2.waitKey(1)
 
 
-print("about to load Sensor Factory")
 
 # Sensor Factory class which inherits the GstRtspServer base class and add
 # properties to it.
-class SensorFactory(GstRtspServer.RTSPMediaFactory):
-    def __init__(self, **properties):
-        super(SensorFactory, self).__init__(**properties)
-        self.number_frames = 0
-        self.fps = 5
-        self.duration = 1 / self.fps * Gst.SECOND  # duration of a frame in nanoseconds
-        self.launch_string = 'appsrc name=source is-live=true block=true format=GST_FORMAT_TIME ' \
-                             'caps=video/x-raw,format=BGR,width={},height={},framerate={}/1 ' \
-                             '! videoconvert ! video/x-raw,format=I420 ' \
-                             '! x264enc speed-preset=ultrafast tune=zerolatency ' \
-                             '! rtph264pay config-interval=1 name=pay0 pt=96' \
-                             .format(640, 480, self.fps)
-    # method to capture the video feed from the camera and push it to the
-    # streaming buffer.
-    def on_need_data(self, src, length):
-        # if self.cap.isOpened():
-        if True:
-            # ret, frame = self.cap.read()
+# class SensorFactory(GstRtspServer.RTSPMediaFactory):
+#     def __init__(self, **properties):
+#         super(SensorFactory, self).__init__(**properties)
+#         self.number_frames = 0
+#         self.fps = 5
+#         self.duration = 1 / self.fps * Gst.SECOND  # duration of a frame in nanoseconds
+#         self.launch_string = 'appsrc name=source is-live=true block=true format=GST_FORMAT_TIME ' \
+#                              'caps=video/x-raw,format=BGR,width={},height={},framerate={}/1 ' \
+#                              '! videoconvert ! video/x-raw,format=I420 ' \
+#                              '! x264enc speed-preset=ultrafast tune=zerolatency ' \
+#                              '! rtph264pay config-interval=1 name=pay0 pt=96' \
+#                              .format(opt2.image_width, opt2.image_height, self.fps)
+#     # method to capture the video feed from the camera and push it to the
+#     # streaming buffer.
+#     def on_need_data(self, src, length):
+#         # if self.cap.isOpened():
+#         if True:
+#             # ret, frame = self.cap.read()
 
-            filename = "videotestsrc-frame.jpg"
-            ret = True
-            frame = cv.imread(filename)
-            # cv2.imshow("RTSP View", frame)
+#             filename = "videotestsrc-frame.jpg"
+#             ret = True
+#             frame = cv.imread(filename)
+#             # cv2.imshow("RTSP View", frame)
 
-            if ret:
-                # It is better to change the resolution of the camera 
-                # instead of changing the image shape as it affects the image quality.
-                frame = cv2.resize(frame, (640, 480), \
-                    interpolation = cv2.INTER_LINEAR)
-                data = frame.tostring()
-                buf = Gst.Buffer.new_allocate(None, len(data), None)
-                buf.fill(0, data)
-                buf.duration = self.duration
-                timestamp = self.number_frames * self.duration
-                buf.pts = buf.dts = int(timestamp)
-                buf.offset = timestamp
-                self.number_frames += 1
-                retval = src.emit('push-buffer', buf)
-                print('pushed buffer, frame {}, duration {} ns, durations {} s'.format(self.number_frames,
-                                                                                       self.duration,
-                                                                                       self.duration / Gst.SECOND))
-                if retval != Gst.FlowReturn.OK:
-                    print(retval)
-    # attach the launch string to the override method
-    def do_create_element(self, url):
-        return Gst.parse_launch(self.launch_string)
+#             if ret:
+#                 # It is better to change the resolution of the camera 
+#                 # instead of changing the image shape as it affects the image quality.
+#                 frame = cv2.resize(frame, (opt2.image_width, opt2.image_height), \
+#                     interpolation = cv2.INTER_LINEAR)
+#                 data = frame.tostring()
+#                 buf = Gst.Buffer.new_allocate(None, len(data), None)
+#                 buf.fill(0, data)
+#                 buf.duration = self.duration
+#                 timestamp = self.number_frames * self.duration
+#                 buf.pts = buf.dts = int(timestamp)
+#                 buf.offset = timestamp
+#                 self.number_frames += 1
+#                 retval = src.emit('push-buffer', buf)
+#                 print('pushed buffer, frame {}, duration {} ns, durations {} s'.format(self.number_frames,
+#                                                                                        self.duration,
+#                                                                                        self.duration / Gst.SECOND))
+#                 if retval != Gst.FlowReturn.OK:
+#                     print(retval)
+#     # attach the launch string to the override method
+#     def do_create_element(self, url):
+#         return Gst.parse_launch(self.launch_string)
     
-    # attaching the source element to the rtsp media
-    def do_configure(self, rtsp_media):
-        self.number_frames = 0
-        appsrc = rtsp_media.get_element().get_child_by_name('source')
-        appsrc.connect('need-data', self.on_need_data)
+#     # attaching the source element to the rtsp media
+#     def do_configure(self, rtsp_media):
+#         self.number_frames = 0
+#         appsrc = rtsp_media.get_element().get_child_by_name('source')
+#         appsrc.connect('need-data', self.on_need_data)
 
-print("about to load Gst Server")
+# print("about to load Gst Server")
 
-parser2 = argparse.ArgumentParser()
-# parser2.add_argument("--device_id", required=True, help="device id for the \
-#                 video device or video file location")
-# parser2.add_argument("--fps", required=True, help="fps of the camera", type = int)
-# parser2.add_argument("--image_width", required=True, help="video frame width", type = int)
-# parser2.add_argument("--image_height", required=True, help="video frame height", type = int)
-parser2.add_argument("--port", default=8554, help="port to stream video", type = int)
-parser2.add_argument("--stream_uri", default = "/video_stream", help="rtsp video stream uri")
-opt2 = parser2.parse_args()
+# parser2 = argparse.ArgumentParser()
+# # parser2.add_argument("--device_id", required=True, help="device id for the \
+# #                 video device or video file location")
+# # parser2.add_argument("--fps", required=True, help="fps of the camera", type = int)
+# parser2.add_argument("--image_width", default=640, help="video frame width", type = int)
+# parser2.add_argument("--image_height", default=480, help="video frame height", type = int)
+# parser2.add_argument("--port", default=8554, help="port to stream video", type = int)
+# parser2.add_argument("--stream_uri", default = "/video_stream", help="rtsp video stream uri")
+# opt2 = parser2.parse_args()
 
-print(str(opt2.port) + " going to " + opt2.stream_uri)
+# print(str(opt2.port) + " going to " + opt2.stream_uri)
 
-# Rtsp server implementation where we attach the factory sensor with the stream uri
-class GstServer(GstRtspServer.RTSPServer):
-    def __init__(self, **properties):
-        super(GstServer, self).__init__(**properties)
-        self.factory = SensorFactory()
-        self.factory.set_shared(True)
-        self.set_service(opt2.port)
-        self.get_mount_points().add_factory(opt2.stream_uri, self.factory)
-        self.attach(None)    
+# # Rtsp server implementation where we attach the factory sensor with the stream uri
+# class GstServer(GstRtspServer.RTSPServer):
+#     def __init__(self, **properties):
+#         super(GstServer, self).__init__(**properties)
+#         self.factory = SensorFactory()
+#         self.factory.set_shared(True)
+#         self.set_service(opt2.port)
+#         self.get_mount_points().add_factory(opt2.stream_uri, self.factory)
+#         self.attach(None)    
 
+
+
+print("loop thread init and gst.init")
+
+# loop = GObject.MainLoop()
+# GObject.threads_init()
+# Gst.init(None)
+
+
+print("loading my factory")
+
+# WHY DOES THIS CREATE A SEGMENTATION FAULT?
+# AND WHY CAN'T I CATCH THE EXCEPTION DOWN BELOW?!
+# 
+# class MyFactory(GstRtspServer.RTSPMediaFactory):
+# 	def __init__(self):
+# 		GstRtspServer.RTSPMediaFactory.__init__(self)
+
+# 	def do_create_element(self, url):
+# 		s_src = "v4l2src ! video/x-raw,rate=30,width=320,height=240 ! videoconvert ! video/x-raw,format=I420"
+# 		s_h264 = "videoconvert ! vaapiencode_h264 bitrate=1000"
+# 		s_src = "videotestsrc ! video/x-raw,rate=30,width=320,height=240,format=I420"
+# 		s_h264 = "x264enc tune=zerolatency"
+# 		pipeline_str = "( {s_src} ! queue max-size-buffers=1 name=q_enc ! {s_h264} ! rtph264pay name=pay0 pt=96 )".format(**locals())
+# 		if len(sys.argv) > 1:
+# 			pipeline_str = " ".join(sys.argv[1:])
+# 		print(pipeline_str)
+# 		return Gst.parse_launch(pipeline_str)
+
+
+# print("loading GstServer")
+
+# class GstServer():
+# 	def __init__(self):
+# 		self.server = GstRtspServer.RTSPServer()
+# 		f = MyFactory()
+# 		f.set_shared(True)
+# 		m = self.server.get_mount_points()
+# 		m.add_factory("/test", f)
+# 		self.server.attach(None)
+
+# def thread_function():
+#     s = GstServer()
+#     loop.run()
+
+
+print("loading Main")
 
 def main(args=None):
 
-    # GObject.threads_init()
-    # Gst.init(None)
-    # server = GstServer()
-    # loop = GObject.MainLoop()
-    # loop.run()
+    try:
+        # GObject.threads_init()
+        # Gst.init(None)
+        # server = GstServer()
+        # loop = GObject.MainLoop()
+        # loop.run()
+        print("attempt to launch rclpy")
 
-    rclpy.init(args=args)
+        rclpy.init(args=args)
 
-    minimal_subscriber = MinimalSubscriber()
+        print("attempt to loading subscriber")
 
-    rclpy.spin(minimal_subscriber)
+        minimal_subscriber = MinimalSubscriber()
 
-    print("destroying subscriber")
-    # Destroy the node explicitly
-    # (optional - otherwise it will be done automatically
-    # when the garbage collector destroys the node object)
-    minimal_subscriber.destroy_node()
-    rclpy.shutdown()
+        print("spinning")
+        
+        rclpy.spin(minimal_subscriber)
 
+        print("destroying subscriber")
+        # Destroy the node explicitly
+        # (optional - otherwise it will be done automatically
+        # when the garbage collector destroys the node object)
+        minimal_subscriber.destroy_node()
+        rclpy.shutdown()
+    except Exception as e:
+        # Catch the exception and print its details
+        print("An exception occurred:")
+        print(type(e).__name__ + ": " + str(e))
+    # except:
+    #     print("An exception occurred") 
+    
 
 if __name__ == '__main__':
     main()
